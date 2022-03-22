@@ -17,3 +17,20 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+
+Route::prefix('users')->namespace('Users')->group(function (){
+
+    Route::prefix('auth')->group(function (){
+
+        Route::post('/register', 'AuthController@register');
+        Route::post('/login', 'AuthController@login');
+
+        Route::prefix('email')->middleware(['auth:users,users-web'])->group(function (){
+            Route::post('/verify', 'AuthController@verifyEmail');
+            Route::get('/resend_verification_code', 'AuthController@resendVerificationCode');
+        });
+    });
+
+});
