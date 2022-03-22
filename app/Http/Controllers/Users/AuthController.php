@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Users;
 
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Models\VerificationCode;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +16,8 @@ use App\Traits\ReferenceGeneratorTrait;
 
 class AuthController extends ApiController
 {
+    use ReferenceGeneratorTrait;
+
     public function register(Request $request){
         try{
             //Validate the user input
@@ -33,16 +37,6 @@ class AuthController extends ApiController
                 'password' => Hash::make($request->password),
             ]);
 
-            $createUserUsedPassword = UserUsedPassword::create([
-                'user_id' => $createUser->id,
-                'password' => Hash::make($request->password),
-            ]);
-
-            $createProfile = UserProfile::create([
-                'uid' => $this->uniqueUid(),
-                'user_id' => $createUser->id
-            ]);
-
             //Generate and register email verification code
             $generatedVerificationCode = VerificationCode::create([
                 'user_id' => $createUser->id,
@@ -51,10 +45,10 @@ class AuthController extends ApiController
                 'expires_at' => Carbon::now()->addMinutes(15),
             ]);
 
-            if($createUser && $createUserUsedPassword && $createProfile && $generatedVerificationCode){
+            if($createUser && $generatedVerificationCode){
                 DB::commit();
 
-                event(new UserRegistered($createUser, $generatedVerificationCode->code));
+//                event(new UserRegistered($createUser, $generatedVerificationCode->code));
 
                 $data = [
                     'token' => $createUser->createToken('UserAuthToken')->plainTextToken,
