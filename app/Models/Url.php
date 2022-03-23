@@ -10,6 +10,6 @@ class Url extends Model
     use HasFactory;
 
     protected $fillable = [
-      'url_slug', 'url_link', 'url_visit'
+      'user_id', 'url_slug', 'url_link', 'url_visit'
     ];
 }
