@@ -33,4 +33,9 @@ Route::prefix('users')->namespace('Users')->group(function (){
         });
     });
 
+    Route::prefix('urls')->middleware(['auth:users,users-web'])->group(function () {
+        Route::get('/', 'UrlsController@index');
+        Route::post('/', 'UrlsController@store');
+    });
+
 });

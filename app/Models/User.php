@@ -47,4 +47,8 @@ class User extends Authenticatable
     public function verification_code(){
         return $this->hasMany(VerificationCode::class);
     }
+
+    public function urls(){
+        return $this->hasMany(Url::class);
+    }
 }

@@ -15,9 +15,11 @@ return new class extends Migration
     {
         Schema::create('urls', function (Blueprint $table) {
             $table->id();
-            $table->string("url_slug");
+            $table->unsignedBigInteger('user_id')->index()->nullable();
+            $table->foreign('user_id')->references('id')->on('users')->onUpdate('cascade')->onDelete('cascade');
+            $table->string("url_slug")->unique();
             $table->string("url_link");
-            $table->integer("url_visit");
+            $table->integer("url_visit")->default(0);
             $table->timestamps();
         });
     }
