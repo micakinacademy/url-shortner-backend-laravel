@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Users;
 
+use App\Events\UserEmailVerified;
+use App\Events\UserRegistered;
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\Controller;
 use App\Models\User;
@@ -48,7 +50,7 @@ class AuthController extends ApiController
             if($createUser && $generatedVerificationCode){
                 DB::commit();
 
-//                event(new UserRegistered($createUser, $generatedVerificationCode->code));
+                event(new UserRegistered($createUser, $generatedVerificationCode->code));
 
                 $data = [
                     'token' => $createUser->createToken('UserAuthToken')->plainTextToken,
@@ -101,6 +103,74 @@ class AuthController extends ApiController
 
         } catch (\Exception $error) {
             return $this->exceptionError($error->getMessage(), 500);
+        }
+    }
+
+    public function verifyEmail(Request $request){
+
+        //Store Authenticated User into a variable
+        $loggedUser = Auth::user();
+
+        // Check if user email is not verified yet
+        if(!$loggedUser->hasVerifiedEmail()){
+
+            //  Validate the verification code and  verify user's email
+            $verificationCode = $loggedUser->verification_code()->where('code', $request->verification_code)->first();
+
+            if(!$verificationCode){
+                return $this->respondWithError("Verification Code is Invalid", 403);
+            }
+
+            if($verificationCode->expires_at < Carbon::now())
+            {
+                $verificationCode->delete();
+                return $this->respondWithError("Invalid or Expired Recovery Code",403);
+            }
+
+            $verifyUser = $loggedUser->markEmailAsVerified();
+            $verificationCode->delete();
+
+            if($verifyUser){
+                event(new UserEmailVerified($loggedUser));
+
+                return $this->respondWithSuccess("Email is Verified", 200);
+
+            }else {
+                return $this->respondWithError("Email verification failed", 503);
+            }
+        }else {
+            return $this->respondWithSuccess("Email is already verified", 200);
+        }
+
+    }
+
+    public function resendVerificationCode(){
+        try{
+
+            $authUser = Auth::user();
+            DB::beginTransaction();
+
+            //Generate and register email verification code
+            $generatedVerificationCode = VerificationCode::create([
+                'user_id' => $authUser->id,
+                'code' => mt_rand(100000,999999),
+                'purpose' => 'email_verification',
+                'expires_at' => Carbon::now()->addMinutes(15),
+            ]);
+
+            if($generatedVerificationCode){
+                DB::commit();
+
+                event(new UserRegistered($authUser, $generatedVerificationCode->code));
+
+                return $this->respondWithSuccess("New Verification Code has been sent to this registered email", 200);
+            }else {
+                DB::rollBack();
+                return $this->respondWithError("Something went wrong", 503);
+            }
+        }
+        catch (\Exception $e){
+            return $this->exceptionError($e->getMessage(), 500);
         }
     }
 
