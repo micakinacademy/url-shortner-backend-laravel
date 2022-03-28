@@ -18,7 +18,6 @@ class UrlsController extends ApiController
 
     public function index(){
         $urls = Url::all();
-
         return UrlResource::collection($urls);
 
     }

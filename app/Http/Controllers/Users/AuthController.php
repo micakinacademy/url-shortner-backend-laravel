@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\VerificationCode;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
@@ -101,6 +102,26 @@ class AuthController extends ApiController
         } catch (\Exception $error) {
             return $this->exceptionError($error->getMessage(), 500);
         }
+    }
+
+    public function accountInfo(){
+
+        //Check if the user's account is verified
+
+        $loggedUser = Auth::user();
+
+//        return $loggedUser->hasVerifiedEmail();
+
+        $loggedUser->hasVerifiedEmail() ? $isEmailVerified = true : $isEmailVerified = false;
+
+        $dataToReturn = [
+            'email_verified' => $isEmailVerified,
+            'username' => $loggedUser->username,
+            'email' => $loggedUser->email,
+            'is_account_active' => $loggedUser->active ? true : false
+        ];
+
+        return $this->respondWithSuccess("Successfully Retrieved User Info", 200, $dataToReturn);
     }
 
     public function validateUserRegistration(){

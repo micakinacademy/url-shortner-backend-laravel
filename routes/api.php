@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 
-Route::prefix('users')->namespace('Users')->group(function (){
+Route::prefix('user')->namespace('Users')->group(function (){
 
     Route::prefix('auth')->group(function (){
 
@@ -31,6 +31,10 @@ Route::prefix('users')->namespace('Users')->group(function (){
             Route::post('/verify', 'AuthController@verifyEmail');
             Route::get('/resend_verification_code', 'AuthController@resendVerificationCode');
         });
+    });
+
+    Route::prefix('account')->middleware(['auth:users,users-web'])->group(function (){
+        Route::get('/', 'AuthController@accountInfo');
     });
 
     Route::prefix('urls')->middleware(['auth:users,users-web'])->group(function () {
