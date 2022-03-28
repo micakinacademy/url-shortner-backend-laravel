@@ -122,15 +122,15 @@
     <![endif]-->
 </head>
 
-<body link="#ff4800" style="background-color: #ff6631;">
+<body link="#ff4800" style="background-color: #EAECED;">
 
 <!--container for Microsoft Outlook-->
 <!--[if (gte mso 9)|(IE)]>
-<table align="center" bgcolor="#ff6631" border="0" cellpadding="0" cellspacing="0" width="600">
+<table align="center" bgcolor="#eaeced" border="0" cellpadding="0" cellspacing="0" width="600">
     <tr>
         <td><![endif]-->
 <!-- open wraper-->
-<table align="center" bgcolor="#ff6631" border="0" cellpadding="0" cellspacing="0" width="100%">
+<table align="center" bgcolor="#EAECED" border="0" cellpadding="0" cellspacing="0" width="100%">
     <tr>
         <td>
 
@@ -145,8 +145,8 @@
                         <br/>
 
                         <div style="width: 100%">
-                            <a href="#" style=" ">
-                                <img width="170px" src="https://res.cloudinary.com/micakindev/image/upload/v1631541264/tryabule/logo_zpywu7.png"  />
+                            <a href="#" style="font-size: 4em; font-weight: bolder;">
+                                Ubit
                             </a>
                         </div>
 
@@ -170,7 +170,7 @@
 
 
                                     <div style="margin: 10px 0px; text-align: center; font-size: 1em; font-weight: bold;">
-                                        &copy; <?php echo date("Y"); ?> - SHORTIT
+                                        &copy; <?php echo date("Y"); ?> - UBIT
                                     </div>
 
                                     <p style="text-align: center; font-size: .80em;line-height: 1.6em; padding:0px 15px">
