@@ -16,3 +16,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::namespace('Users')->group(function (){
+
+});
+
+Route::get('/{any}', function ($any) {
+    return $any;
+})->where('any', '.*');

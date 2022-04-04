@@ -27,6 +27,11 @@ class UrlsController extends ApiController
 
         $findUrl = Url::where('url_slug', $urlSlug)->first();
 
+        if(empty($findUrl)){
+           return "Invalid Link";
+        }else {
+            return redirect()->away($findUrl->url_link);
+        }
 
     }
 
@@ -47,7 +52,7 @@ class UrlsController extends ApiController
                 $new_preferred_slug = $request->preferred_slug;
 
                 //check if URL already exists
-                $checkUrlSlug = Url::where('url_slug', '$new_preferred_slug');
+                $checkUrlSlug = Url::where('url_slug', '$new_preferred_slug')->first();
 
                 if(!empty($checkUrlSlug)){
                     return $this->respondWithError("Slug already exists, please use different one", 422);
