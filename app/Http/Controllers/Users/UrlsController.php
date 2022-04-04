@@ -29,6 +29,10 @@ class UrlsController extends ApiController
         if(empty($findUrl)){
            return "Link not found";
         }else {
+
+            $findUrl->update([
+               'url_visit' => $findUrl->url_visit++
+            ]);
             return redirect()->away($findUrl->url_link);
         }
 
