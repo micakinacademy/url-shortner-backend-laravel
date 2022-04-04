@@ -17,7 +17,7 @@ class UrlsController extends ApiController
     use ReferenceGeneratorTrait;
 
     public function index(){
-        $urls = Url::all();
+        $urls = Auth::user()->urls();
         return UrlResource::collection($urls);
 
     }
