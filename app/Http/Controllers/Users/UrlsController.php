@@ -27,7 +27,7 @@ class UrlsController extends ApiController
         $findUrl = Url::where('url_slug', $slug)->first();
 
         if(empty($findUrl)){
-           return "Invalid Link";
+           return "Link not found";
         }else {
             return redirect()->away($findUrl->url_link);
         }
