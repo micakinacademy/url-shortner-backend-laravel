@@ -31,8 +31,9 @@ class UrlsController extends ApiController
         }else {
 
             $findUrl->update([
-               'url_visit' => $findUrl->url_visit++
+               'url_visit' => $findUrl->url_visit + 1
             ]);
+
             return redirect()->away($findUrl->url_link);
         }
 
