@@ -33,11 +33,11 @@ Route::prefix('user')->namespace('Users')->group(function (){
         });
     });
 
-    Route::prefix('account')->middleware(['auth:users,users-web','email_verified'])->group(function (){
+    Route::prefix('account')->middleware(['auth:users,users-web'])->group(function (){
         Route::get('/', 'AuthController@accountInfo');
     });
 
-    Route::prefix('urls')->middleware(['auth:users,users-web', 'email_verified'])->group(function () {
+    Route::prefix('urls')->middleware(['auth:users,users-web'])->group(function () {
         Route::get('/', 'UrlsController@index');
         Route::post('/', 'UrlsController@store');
     });
