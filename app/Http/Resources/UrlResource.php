@@ -15,9 +15,9 @@ class UrlResource extends JsonResource
     public function toArray($request)
     {
         return  [
-            'url_slug' => $this->url_slug,
             'url_link' => $this->url_link,
             'url_visit' => $this->url_visit,
+            'short_url' => "https://www.ubit.tk/" . $this->url_slug,
         ];
     }
 }
