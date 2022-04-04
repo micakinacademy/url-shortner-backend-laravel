@@ -22,10 +22,9 @@ class UrlsController extends ApiController
 
     }
 
-    public function redirectUrl(Request $request){
-        $urlSlug = $request->url_slug;
+    public static  function redirectUrl($slug){
 
-        $findUrl = Url::where('url_slug', $urlSlug)->first();
+        $findUrl = Url::where('url_slug', $slug)->first();
 
         if(empty($findUrl)){
            return "Invalid Link";

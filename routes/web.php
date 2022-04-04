@@ -19,9 +19,9 @@ Route::get('/', function () {
 
 
 Route::namespace('Users')->group(function (){
-
+    Route::get('/{any}', function ($any) {
+        return \App\Http\Controllers\Users\UrlsController::redirectUrl($any);
+    })->where('any', '.*');
 });
 
-Route::get('/{any}', function ($any) {
-    return $any;
-})->where('any', '.*');
+
