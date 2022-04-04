@@ -22,6 +22,14 @@ class UrlsController extends ApiController
 
     }
 
+    public function redirectUrl(Request $request){
+        $urlSlug = $request->url_slug;
+
+        $findUrl = Url::where('url_slug', $urlSlug)->first();
+
+
+    }
+
     public function store(Request $request){
         try {
             //Validate the user input
@@ -37,6 +45,13 @@ class UrlsController extends ApiController
                 $new_preferred_slug = $this->referenceGenerator(8);
             }else {
                 $new_preferred_slug = $request->preferred_slug;
+
+                //check if URL already exists
+                $checkUrlSlug = Url::where('url_slug', '$new_preferred_slug');
+
+                if(!empty($checkUrlSlug)){
+                    return $this->respondWithError("Slug already exists, please use different one", 422);
+                }
             }
 
             $createUrl = Url::create([
